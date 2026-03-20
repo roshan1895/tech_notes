@@ -1,7 +1,7 @@
 title: Tech Notes
 description: Personal technical notes on server deployment, and more topics coming soon.
 theme: jekyll-theme-cayman
-baseurl: "/tech-notes"
+baseurl: "/tech_notes"
 url: ""
 
 markdown: kramdown
