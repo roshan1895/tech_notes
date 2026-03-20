@@ -1,8 +1,7 @@
 title: Tech Notes
 description: Personal technical notes on server deployment, and more topics coming soon.
-theme: jekyll-theme-cayman
 baseurl: "/tech_notes"
-url: ""
+url: "https://roshan1895.github.io"
 
 markdown: kramdown
 highlighter: rouge
@@ -12,3 +11,4 @@ exclude:
   - LICENSE
   - MEMORY.md
   - .claude/
+  - screen.png
