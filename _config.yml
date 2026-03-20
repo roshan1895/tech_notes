@@ -1,0 +1,14 @@
+title: Tech Notes
+description: Personal technical notes on server deployment, and more topics coming soon.
+theme: jekyll-theme-cayman
+baseurl: "/tech-notes"
+url: ""
+
+markdown: kramdown
+highlighter: rouge
+
+exclude:
+  - README.md
+  - LICENSE
+  - MEMORY.md
+  - .claude/
