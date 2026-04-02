@@ -1,3 +1,8 @@
+---
+layout: default
+title: Security Layer
+---
+
 # 14 - Security Layer (Layer 3) - Deep Dive
 
 > Protecting your server from unauthorized access, attacks, and data breaches.

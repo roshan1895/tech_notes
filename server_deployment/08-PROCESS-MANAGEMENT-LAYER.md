@@ -1,3 +1,8 @@
+---
+layout: default
+title: Process Management
+---
+
 # 17 - Process Management Layer (Layer 6) - Deep Dive
 
 > Keeping your application alive, restarting on crash, and surviving reboots.

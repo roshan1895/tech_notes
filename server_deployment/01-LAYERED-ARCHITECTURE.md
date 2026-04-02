@@ -1,3 +1,8 @@
+---
+layout: default
+title: Layered Architecture
+---
+
 # 01 - Server Deployment Layered Architecture
 
 ## The 7 Core Layers (Every Deployment Has These)

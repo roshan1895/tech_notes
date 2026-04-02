@@ -1,3 +1,8 @@
+---
+layout: default
+title: Manual Deployment
+---
+
 # 03 - Manual Deployment Mastery
 
 ## Why Master Manual First

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    // Apply theme before paint to prevent flash
+    (function() {
+      var t = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
 </head>
 <body>
 
@@ -17,17 +24,42 @@
       <a href="{{ '/' | relative_url }}" class="nav-brand">TechNotes</a>
       <div class="nav-links">
         <a href="{{ '/' | relative_url }}" class="{% if page.url == '/' %}active{% endif %}">Guides</a>
-        <a href="{{ '/server_deployment/' | relative_url }}">Changelog</a>
+        <a href="{{ '/server_deployment/' | relative_url }}" class="{% if page.url contains 'server_deployment' %}active{% endif %}">Server Deployment</a>
+        <a href="{{ '/about' | relative_url }}" class="{% if page.url contains 'about' %}active{% endif %}">About</a>
       </div>
+
+      <button class="search-btn" onclick="openSearch()" aria-label="Search">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4 4" stroke-linecap="round"/></svg>
+        <span>Search</span>
+        <kbd>/</kbd>
+      </button>
+
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <svg class="icon-sun" viewBox="0 0 20 20" fill="currentColor"><path d="M10 15a5 5 0 100-10 5 5 0 000 10zm0-12a1 1 0 01-1-1V1a1 1 0 112 0v1a1 1 0 01-1 1zm0 14a1 1 0 01-1-1v-1a1 1 0 112 0v1a1 1 0 01-1 1zm7-7a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zm10.07-4.07a1 1 0 01-1.41 0l-.71-.71a1 1 0 111.41-1.41l.71.71a1 1 0 010 1.41zM6.05 15.66a1 1 0 01-1.41 0l-.71-.71a1 1 0 111.41-1.41l.71.71a1 1 0 010 1.41zm9.9 0a1 1 0 01-1.41 0l-.71-.71a1 1 0 111.41-1.41l.71.71a1 1 0 010 1.41zM6.05 6.34a1 1 0 01-1.41 0l-.71-.71a1 1 0 111.41-1.41l.71.71a1 1 0 010 1.41z"/></svg>
+        <svg class="icon-moon" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.003 8.003 0 1010.586 10.586z"/></svg>
+      </button>
     </div>
   </nav>
+
+  <!-- Search Modal -->
+  <div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+    <div class="search-modal">
+      <div class="search-input-wrap">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4 4" stroke-linecap="round"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search documentation..." autocomplete="off">
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-empty">Type to search across all guides</div>
+      </div>
+    </div>
+  </div>
 
   <div class="layout">
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-section">
         <div class="sidebar-heading">Documentation</div>
-        <a href="{{ '/server_deployment/' | relative_url }}" class="sidebar-link">
+        <a href="{{ '/server_deployment/' | relative_url }}" class="sidebar-link {% if page.url == '/server_deployment/' %}active{% endif %}">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 8.5h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           Server Deployment
         </a>
@@ -38,7 +70,11 @@
         </a>
       </div>
       <div class="sidebar-bottom">
-        <a href="https://github.com/roshan1895/tech_notes" class="sidebar-btn" target="_blank">
+        <a href="{{ '/about' | relative_url }}" class="sidebar-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3 2.5-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          About Author
+        </a>
+        <a href="https://github.com/roshan1895/tech_notes" class="sidebar-btn" target="_blank" style="margin-top:0.5rem">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           View GitHub
         </a>
@@ -48,6 +84,39 @@
     <!-- Main Content -->
     <main class="main">
       {{ content }}
+
+      {% comment %} Prev/Next Navigation for server_deployment guides {% endcomment %}
+      {% if page.url contains 'server_deployment/' and page.url != '/server_deployment/' %}
+        {% assign guides = site.pages | where_exp: "p", "p.url contains 'server_deployment/'" | where_exp: "p", "p.url != '/server_deployment/'" | sort: "url" %}
+        {% assign current_index = -1 %}
+        {% for g in guides %}
+          {% if g.url == page.url %}
+            {% assign current_index = forloop.index0 %}
+          {% endif %}
+        {% endfor %}
+
+        {% if current_index >= 0 %}
+          <div class="guide-nav">
+            {% assign prev_index = current_index | minus: 1 %}
+            {% if prev_index >= 0 %}
+              {% assign prev_page = guides[prev_index] %}
+              <a href="{{ prev_page.url | relative_url }}" class="guide-nav-link prev">
+                <span class="guide-nav-label">&larr; Previous</span>
+                <span class="guide-nav-title">{{ prev_page.title }}</span>
+              </a>
+            {% endif %}
+
+            {% assign next_index = current_index | plus: 1 %}
+            {% if next_index < guides.size %}
+              {% assign next_page = guides[next_index] %}
+              <a href="{{ next_page.url | relative_url }}" class="guide-nav-link next">
+                <span class="guide-nav-label">Next &rarr;</span>
+                <span class="guide-nav-title">{{ next_page.title }}</span>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
     </main>
   </div>
 
@@ -56,6 +125,112 @@
       <span>&copy; {{ 'now' | date: "%Y" }} Tech Notes by Roshan</span>
     </div>
   </footer>
+
+  <!-- Lunr.js Search -->
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+  <script>
+    // === Search ===
+    var searchIndex, searchData;
+
+    fetch('{{ "/search.json" | relative_url }}')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        searchData = data;
+        searchIndex = lunr(function() {
+          this.ref('url');
+          this.field('title', { boost: 10 });
+          this.field('content');
+          data.forEach(function(doc) { this.add(doc); }, this);
+        });
+      });
+
+    function openSearch() {
+      document.getElementById('searchOverlay').classList.add('active');
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchInput').focus();
+      document.getElementById('searchResults').innerHTML = '<div class="search-empty">Type to search across all guides</div>';
+    }
+
+    function closeSearch() {
+      document.getElementById('searchOverlay').classList.remove('active');
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape') closeSearch();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      var query = e.target.value.trim();
+      var resultsEl = document.getElementById('searchResults');
+
+      if (!query) {
+        resultsEl.innerHTML = '<div class="search-empty">Type to search across all guides</div>';
+        return;
+      }
+
+      if (!searchIndex) {
+        resultsEl.innerHTML = '<div class="search-empty">Loading search index...</div>';
+        return;
+      }
+
+      try {
+        var results = searchIndex.search(query + '*');
+        if (results.length === 0) {
+          resultsEl.innerHTML = '<div class="search-empty">No results found for "' + query + '"</div>';
+          return;
+        }
+
+        resultsEl.innerHTML = results.slice(0, 10).map(function(r) {
+          var doc = searchData.find(function(d) { return d.url === r.ref; });
+          if (!doc) return '';
+          var snippet = doc.content.substring(0, 150).replace(/</g, '&lt;') + '...';
+          return '<a class="search-result-item" href="' + doc.url + '"><h4>' + doc.title + '</h4><p>' + snippet + '</p></a>';
+        }).join('');
+      } catch(err) {
+        resultsEl.innerHTML = '<div class="search-empty">No results found</div>';
+      }
+    });
+
+    // === Dark Mode ===
+    function toggleTheme() {
+      var html = document.documentElement;
+      var current = html.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+
+    // === Copy Buttons ===
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('pre').forEach(function(pre) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-wrapper';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+
+        var btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M5 11H3.5A1.5 1.5 0 012 9.5v-7A1.5 1.5 0 013.5 1h7A1.5 1.5 0 0112 2.5V5"/></svg>Copy';
+        btn.onclick = function() {
+          var code = pre.querySelector('code');
+          var text = code ? code.innerText : pre.innerText;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.innerHTML = '&#10003; Copied';
+            btn.classList.add('copied');
+            setTimeout(function() {
+              btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M5 11H3.5A1.5 1.5 0 012 9.5v-7A1.5 1.5 0 013.5 1h7A1.5 1.5 0 0112 2.5V5"/></svg>Copy';
+              btn.classList.remove('copied');
+            }, 2000);
+          });
+        };
+        wrapper.appendChild(btn);
+      });
+    });
+  </script>
 
 </body>
 </html>

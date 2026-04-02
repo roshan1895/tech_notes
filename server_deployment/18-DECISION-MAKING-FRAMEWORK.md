@@ -1,3 +1,8 @@
+---
+layout: default
+title: Decision Framework
+---
+
 # 12 - Decision Making Framework
 
 ## How to Choose: The Right Setup for Your Project

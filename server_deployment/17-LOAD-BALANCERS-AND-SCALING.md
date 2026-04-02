@@ -1,3 +1,8 @@
+---
+layout: default
+title: Load Balancers & Scaling
+---
+
 # 09 - Load Balancers, Scaling & Cost Management
 
 ## When Do You Need Scaling?

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Deployment Templates
+---
+
 # 11 - Smart Deployment Templates (Reusable Scripts)
 
 ## Goal: Deploy Any Project in Under 10 Minutes

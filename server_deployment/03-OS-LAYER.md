@@ -1,3 +1,8 @@
+---
+layout: default
+title: OS Layer
+---
+
 # 13 - OS Layer Deep Dive (Linux for Server Deployment)
 
 ## Why This Matters

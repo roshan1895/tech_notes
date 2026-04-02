@@ -1,3 +1,8 @@
+---
+layout: default
+title: Infrastructure Layer
+---
+
 # 19 - Infrastructure Layer (Layer 1) - Deep Dive
 
 > The foundation: choosing, provisioning, and configuring your virtual server.

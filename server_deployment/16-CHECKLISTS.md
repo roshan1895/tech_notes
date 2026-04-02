@@ -1,3 +1,8 @@
+---
+layout: default
+title: Checklists
+---
+
 # 10 - Deployment Checklists
 
 ## Checklist A: New Server Setup (One-Time)

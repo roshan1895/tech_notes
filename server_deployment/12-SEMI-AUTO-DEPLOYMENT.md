@@ -1,3 +1,8 @@
+---
+layout: default
+title: Semi-Auto Deployment
+---
+
 # 06 - Semi-Auto Deployment (Shell Scripts)
 
 ## What is Semi-Auto?

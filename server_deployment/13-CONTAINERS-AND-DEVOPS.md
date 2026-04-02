@@ -1,3 +1,8 @@
+---
+layout: default
+title: Containers & DevOps
+---
+
 # 08 - Containers, Docker & DevOps Roadmap
 
 ## Why Containers?

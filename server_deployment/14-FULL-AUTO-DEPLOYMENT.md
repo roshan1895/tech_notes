@@ -1,3 +1,8 @@
+---
+layout: default
+title: Full Auto Deployment
+---
+
 # 07 - Full Auto Deployment (CI/CD)
 
 ## What is CI/CD?

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Application Layer
+---
+
 # 18 - Application Layer (Layer 7) - Deep Dive
 
 > Your actual code: getting it to the server, configuring it, and keeping it running in production.

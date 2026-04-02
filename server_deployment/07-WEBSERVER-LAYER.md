@@ -1,3 +1,8 @@
+---
+layout: default
+title: Web Server Layer
+---
+
 # 16 - Web Server Layer (Layer 5) - Deep Dive
 
 > Nginx/Apache: the gatekeeper between the internet and your application.

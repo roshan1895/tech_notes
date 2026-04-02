@@ -1,3 +1,8 @@
+---
+layout: default
+title: Debugging & Security
+---
+
 # 05 - Debugging & Security
 
 ## Part 1: Systematic Debugging

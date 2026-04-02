@@ -1,3 +1,8 @@
+---
+layout: default
+title: Stack-Specific Guides
+---
+
 # 04 - Stack-Specific Deployment Guides
 
 ## Stack Comparison Overview

@@ -1,3 +1,8 @@
+---
+layout: default
+title: Network Layer
+---
+
 # 02 - Network Layer Deep Dive
 
 ## The Full Network Path
