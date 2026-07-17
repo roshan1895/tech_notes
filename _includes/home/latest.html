@@ -1,0 +1,27 @@
+{% comment %} Latest notes — newest real docs across all collections. Empty-state until content exists. {% endcomment %}
+{% assign docs = "" | split: "" %}
+{% for d in site.documents %}
+  {% if d.nav_order and d.nav_order != 0 and d.section != 'roadmaps' %}{% assign docs = docs | push: d %}{% endif %}
+{% endfor %}
+{% assign docs = docs | sort: "last_updated" | reverse %}
+
+<section class="home-section">
+  <div class="section-header">
+    <span>Latest Notes</span>
+    <div class="line"></div>
+    <a href="{{ '/docs/' | relative_url }}" class="section-more">browse docs →</a>
+  </div>
+  {% if docs.size > 0 %}
+    <div class="note-list">
+      {% for doc in docs limit: 6 %}
+        <a href="{{ doc.url | relative_url }}" class="note-item glow-card">
+          <span class="note-section">{{ doc.section | replace: '-', ' ' }}</span>
+          <span class="note-title">{{ doc.title }}</span>
+          {% if doc.last_updated %}<span class="note-date">{{ doc.last_updated | date: "%b %-d" }}</span>{% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-inline">No notes published yet — they'll appear here automatically as you add docs.</div>
+  {% endif %}
+</section>

@@ -1,0 +1,52 @@
+# =============================================================================
+#  Site navigation — single source of truth for the top nav and left sidebar.
+#
+#  Adding a section is a ONE-LINE change here. The sidebar (_includes/sidebar.html)
+#  is multi-level: any item with a `collection` auto-lists that collection's docs
+#  (sorted by nav_order) as collapsible children — no per-page nav maintenance.
+#
+#  Item fields:
+#    title       Display label (required)
+#    icon        Emoji shown in nav (falls back to a generic glyph)
+#    collection  Jekyll collection -> links to /<collection>/, auto-lists children,
+#                and marks active when page.section == collection
+#    url         Explicit URL (use instead of `collection` for non-collection pages)
+#    status      available | soon   (soon -> rendered disabled with a badge)
+#    external    true for outbound links (opens in new tab)
+# =============================================================================
+
+# ---- Top navigation bar --------------------------------------------------
+primary:
+  - { title: Home,          url: /,                     icon: "🏠" }
+  - { title: Docs,          url: /docs/,                icon: "📚" }
+  - { title: Roadmaps,      url: /roadmaps/,            icon: "🧭" }
+  - { title: Cheat Sheets,  url: /cheatsheets/,         icon: "📖" }
+
+# ---- Left sidebar --------------------------------------------------------
+sidebar:
+  - group: Learn
+    items:
+      - { title: Learning Paths,      icon: "📚", url: /roadmaps/,            status: available }
+
+  - group: Topics
+    items:
+      - { title: Cloud,               icon: "☁️",  collection: cloud,               status: soon }
+      - { title: Containers,          icon: "🐳", collection: containers,          status: soon }
+      - { title: Linux,               icon: "🖥️", collection: linux,               status: soon }
+      - { title: Networking,          icon: "🌐", collection: networking,          status: soon }
+      - { title: DevOps,              icon: "⚙️",  collection: devops,              status: soon }
+      - { title: Android,             icon: "📱", collection: android,             status: soon }
+      - { title: Architecture,        icon: "🏗️", collection: architecture,        status: soon }
+      - { title: Databases,           icon: "💾", collection: databases,           status: soon }
+      - { title: Real Projects,       icon: "📝", collection: real-projects,       status: soon }
+      - { title: Interview Questions, icon: "❓", collection: interview-questions, status: soon }
+      - { title: Cheat Sheets,        icon: "📖", collection: cheatsheets,         status: soon }
+
+  - group: Resources
+    items:
+      - { title: Server Deployment,   icon: "🚀", url: /server_deployment/,   status: available }
+      - { title: Glossary,            icon: "📔", url: /glossary/,            status: available }
+      - { title: Certifications,      icon: "🎓", url: /certifications/,      status: available }
+      - { title: Leadership,          icon: "🧠", collection: leadership,     status: soon }
+      - { title: About,               icon: "👤", url: /about,                status: available }
+      - { title: GitHub,              icon: "⭐", url: "https://github.com/roshan1895/tech_notes", status: available, external: true }

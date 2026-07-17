@@ -1,0 +1,13 @@
+{% comment %} Breadcrumb: Docs / <Section> / <Page> {% endcomment %}
+{% assign section_title = page.section | replace: '-', ' ' %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="{{ '/docs/' | relative_url }}">Docs</a>
+  {% if page.section %}
+    <span class="breadcrumb-sep" aria-hidden="true">/</span>
+    <a href="{{ '/' | append: page.section | append: '/' | relative_url }}" class="breadcrumb-section">{{ section_title }}</a>
+  {% endif %}
+  {% unless page.nav_order == 0 %}
+    <span class="breadcrumb-sep" aria-hidden="true">/</span>
+    <span class="breadcrumb-current" aria-current="page">{{ page.title }}</span>
+  {% endunless %}
+</nav>

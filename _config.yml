@@ -1,14 +1,102 @@
-title: Tech Notes
-description: Personal technical notes on server deployment, and more topics coming soon.
+title: StackNotes
+description: Engineering Notes, Real Cases, and Developer Playbooks
 baseurl: "/tech_notes"
 url: "https://roshan1895.github.io"
+lang: en
+
+# SEO / social (consumed by jekyll-seo-tag)
+author:
+  name: Roshan
+  twitter: ""
+logo: /assets/favicon-192.png
+twitter:
+  card: summary_large_image
+social:
+  name: Roshan
+  links: []
 
 markdown: kramdown
 highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+
+# GitHub Pages whitelisted plugins only — deployment stays intact.
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+feed:
+  path: feed.xml
+
+# -----------------------------------------------------------------------------
+# Collections — one per documentation category. Collections give scoped
+# iteration (site.<name>) instead of scanning site.pages, clean /<name>/:path/
+# URLs, and per-collection defaults. All core Jekyll — GitHub Pages safe.
+# Add a new category by adding an entry here + a matching defaults scope below
+# + a nav entry in _data/navigation.yml.
+# -----------------------------------------------------------------------------
+collections:
+  roadmaps:            { output: true, permalink: "/roadmaps/:path/" }
+  cloud:               { output: true, permalink: "/cloud/:path/" }
+  containers:          { output: true, permalink: "/containers/:path/" }
+  linux:               { output: true, permalink: "/linux/:path/" }
+  networking:          { output: true, permalink: "/networking/:path/" }
+  devops:              { output: true, permalink: "/devops/:path/" }
+  android:             { output: true, permalink: "/android/:path/" }
+  architecture:        { output: true, permalink: "/architecture/:path/" }
+  databases:           { output: true, permalink: "/databases/:path/" }
+  real-projects:       { output: true, permalink: "/real-projects/:path/" }
+  interview-questions: { output: true, permalink: "/interview-questions/:path/" }
+  cheatsheets:         { output: true, permalink: "/cheatsheets/:path/" }
+  leadership:          { output: true, permalink: "/leadership/:path/" }
+
+# Per-collection defaults: every doc gets layout `doc` and a `section` key
+# (used for sidebar active-state and the collection-scoped pager), so new docs
+# need only `title:` + `nav_order:` in their front matter.
+defaults:
+  - scope: { path: "", type: cloud }
+    values: { layout: doc, section: cloud }
+  - scope: { path: "", type: containers }
+    values: { layout: doc, section: containers }
+  - scope: { path: "", type: linux }
+    values: { layout: doc, section: linux }
+  - scope: { path: "", type: networking }
+    values: { layout: doc, section: networking }
+  - scope: { path: "", type: devops }
+    values: { layout: doc, section: devops }
+  - scope: { path: "", type: android }
+    values: { layout: doc, section: android }
+  - scope: { path: "", type: architecture }
+    values: { layout: doc, section: architecture }
+  - scope: { path: "", type: databases }
+    values: { layout: doc, section: databases }
+  - scope: { path: "", type: real-projects }
+    values: { layout: doc, section: real-projects }
+  - scope: { path: "", type: interview-questions }
+    values: { layout: doc, section: interview-questions }
+  - scope: { path: "", type: cheatsheets }
+    values: { layout: doc, section: cheatsheets }
+  - scope: { path: "", type: leadership }
+    values: { layout: doc, section: leadership }
+  - scope: { path: "", type: roadmaps }
+    values: { layout: roadmap, section: roadmaps }
 
 exclude:
   - README.md
   - LICENSE
   - MEMORY.md
+  - CLAUDE.md
   - .claude/
   - screen.png
+  - stacknotes/
+  - STACKNOTES_MIGRATION_PLAN.md
+  - node_modules/
+  - vendor/
+  - .bundle/
+  - _templates/
+  - Gemfile
+  - Gemfile.lock

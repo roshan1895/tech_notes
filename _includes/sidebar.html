@@ -1,0 +1,65 @@
+<!-- Sidebar — multi-level, collapsible, auto-generated from _data/navigation.yml
+     + each collection's docs. Rendered server-side; JS only persists open state. -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()" hidden></div>
+<aside class="sidebar" id="sidebar" aria-label="Documentation navigation">
+  <div class="sidebar-scroll">
+    {% for group in site.data.navigation.sidebar %}
+      <div class="sidebar-heading">{{ group.group }}</div>
+
+      {% for item in group.items %}
+        {% comment %} Collect this collection's child docs (exclude the nav_order 0 landing) {% endcomment %}
+        {% assign kids = "" | split: "" %}
+        {% if item.collection %}
+          {% for d in site[item.collection] %}
+            {% if d.nav_order and d.nav_order != 0 %}{% assign kids = kids | push: d %}{% endif %}
+          {% endfor %}
+          {% assign kids = kids | sort: "nav_order" %}
+        {% endif %}
+
+        {% comment %} Active state {% endcomment %}
+        {% assign cat_active = false %}
+        {% if item.collection and page.section == item.collection %}{% assign cat_active = true %}
+        {% elsif item.url and item.url != '/' and page.url contains item.url %}{% assign cat_active = true %}{% endif %}
+
+        {% if item.collection and kids.size > 0 %}
+          {% comment %} ---- Collapsible category with children ---- {% endcomment %}
+          <details class="sidebar-cat" data-cat="{{ item.collection }}"{% if cat_active %} open{% endif %}>
+            <summary class="sidebar-link{% if cat_active %} active{% endif %}">
+              <span class="sidebar-emoji" aria-hidden="true">{{ item.icon }}</span>
+              <span class="sidebar-label">{{ item.title }}</span>
+              <svg class="sidebar-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="sidebar-children">
+              <a href="{{ '/' | append: item.collection | append: '/' | relative_url }}" class="sidebar-sublink{% if page.url == '/' | append: item.collection | append: '/' %} active{% endif %}">Overview</a>
+              {% for kid in kids %}
+                <a href="{{ kid.url | relative_url }}" class="sidebar-sublink{% if page.url == kid.url %} active{% endif %}">{{ kid.title }}</a>
+              {% endfor %}
+            </div>
+          </details>
+
+        {% else %}
+          {% comment %} ---- Plain link (empty collection, or a page/external link) ---- {% endcomment %}
+          {% if item.collection %}{% assign target = '/' | append: item.collection | append: '/' %}{% else %}{% assign target = item.url %}{% endif %}
+          {% if item.status == 'soon' %}
+            <a href="{{ target | relative_url }}" class="sidebar-link{% if cat_active %} active{% endif %}">
+              <span class="sidebar-emoji" aria-hidden="true">{{ item.icon }}</span>
+              <span class="sidebar-label">{{ item.title }}</span>
+              <span class="badge">soon</span>
+            </a>
+          {% elsif item.external %}
+            <a href="{{ item.url }}" class="sidebar-link" target="_blank" rel="noopener">
+              <span class="sidebar-emoji" aria-hidden="true">{{ item.icon }}</span>
+              <span class="sidebar-label">{{ item.title }}</span>
+              <svg class="sidebar-ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3H3.5A1.5 1.5 0 002 4.5v8A1.5 1.5 0 003.5 14h8a1.5 1.5 0 001.5-1.5V10M9 3h4v4M13 3L7 9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          {% else %}
+            <a href="{{ target | relative_url }}" class="sidebar-link{% if cat_active %} active{% endif %}">
+              <span class="sidebar-emoji" aria-hidden="true">{{ item.icon }}</span>
+              <span class="sidebar-label">{{ item.title }}</span>
+            </a>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+</aside>

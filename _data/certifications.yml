@@ -1,0 +1,34 @@
+# =============================================================================
+#  Certifications — FRAMEWORK ONLY. Names + status tiers, no study content.
+#  `roadmap` links a cert card to its roadmap page (/roadmaps/<key>/).
+#  Set `status: planned | in-progress | earned` to drive the badge.
+# =============================================================================
+
+certifications:
+  - name: Google Associate Cloud Engineer
+    short: Google ACE
+    icon: "☁️"
+    provider: Google Cloud
+    roadmap: google-ace
+    status: planned
+
+  - name: AWS Certified Solutions Architect
+    short: AWS SAA
+    icon: "🟧"
+    provider: Amazon Web Services
+    roadmap: aws
+    status: planned
+
+  - name: Certified Kubernetes Administrator
+    short: CKA
+    icon: "☸️"
+    provider: CNCF
+    roadmap: kubernetes
+    status: planned
+
+  - name: HashiCorp Certified Terraform Associate
+    short: Terraform Associate
+    icon: "🏗️"
+    provider: HashiCorp
+    roadmap: terraform
+    status: planned

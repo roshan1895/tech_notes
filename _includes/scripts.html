@@ -1,0 +1,237 @@
+<script>
+/* ============================ Theme ============================ */
+function toggleTheme() {
+  var html = document.documentElement;
+  var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+  if (window.__reThemeMermaid) window.__reThemeMermaid();
+}
+
+/* ==================== Mobile sidebar drawer ==================== */
+function toggleSidebar() {
+  document.body.classList.contains('sidebar-open') ? closeSidebar() : openSidebar();
+}
+function openSidebar() {
+  document.body.classList.add('sidebar-open');
+  var o = document.getElementById('sidebarOverlay'); if (o) o.hidden = false;
+  var h = document.querySelector('.nav-hamburger'); if (h) h.setAttribute('aria-expanded', 'true');
+}
+function closeSidebar() {
+  document.body.classList.remove('sidebar-open');
+  var o = document.getElementById('sidebarOverlay'); if (o) o.hidden = true;
+  var h = document.querySelector('.nav-hamburger'); if (h) h.setAttribute('aria-expanded', 'false');
+}
+
+/* Persist collapsible category open/closed state */
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.sidebar-cat').forEach(function (d) {
+    var key = 'cat:' + d.getAttribute('data-cat');
+    try {
+      var saved = localStorage.getItem(key);
+      if (saved === 'open') d.open = true;
+      if (saved === 'closed' && !d.querySelector('.sidebar-sublink.active')) d.open = false;
+    } catch (e) {}
+    d.addEventListener('toggle', function () {
+      try { localStorage.setItem(key, d.open ? 'open' : 'closed'); } catch (e) {}
+    });
+  });
+});
+
+/* ============================ Search ============================ */
+var searchIndex, searchData, searchReady = false, searchLoading = false, activeResult = -1;
+
+function loadSearch() {
+  if (searchReady || searchLoading) return;
+  searchLoading = true;
+  var s = document.createElement('script');
+  s.src = 'https://unpkg.com/lunr/lunr.js';
+  s.onload = function () {
+    fetch('{{ "/search.json" | relative_url }}')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        searchData = data;
+        searchIndex = lunr(function () {
+          this.ref('url');
+          this.field('title', { boost: 10 });
+          this.field('tags', { boost: 8 });
+          this.field('description', { boost: 4 });
+          this.field('content');
+          data.forEach(function (doc) { this.add(doc); }, this);
+        });
+        searchReady = true;
+        var q = document.getElementById('searchInput');
+        if (q && q.value.trim()) runSearch(q.value.trim());
+      });
+  };
+  document.head.appendChild(s);
+}
+
+function openSearch() {
+  loadSearch();
+  window.__lastFocus = document.activeElement;
+  var ov = document.getElementById('searchOverlay');
+  ov.classList.add('active');
+  var input = document.getElementById('searchInput');
+  input.value = '';
+  input.focus();
+  activeResult = -1;
+  document.getElementById('searchResults').innerHTML = '<div class="search-empty">Type to search across all documentation</div>';
+}
+function closeSearch() {
+  document.getElementById('searchOverlay').classList.remove('active');
+  if (window.__lastFocus && window.__lastFocus.focus) window.__lastFocus.focus();
+}
+
+function runSearch(query) {
+  var resultsEl = document.getElementById('searchResults');
+  if (!searchReady) { resultsEl.innerHTML = '<div class="search-empty">Loading index…</div>'; return; }
+  var results;
+  try {
+    results = searchIndex.search(query + '~1 ' + query + '*');
+  } catch (e) {
+    try { results = searchIndex.search(query); } catch (e2) { results = []; }
+  }
+  if (!results.length) { resultsEl.innerHTML = '<div class="search-empty">No results for "' + query.replace(/</g,'&lt;') + '"</div>'; return; }
+  activeResult = -1;
+  resultsEl.innerHTML = results.slice(0, 12).map(function (r) {
+    var doc = searchData.find(function (d) { return d.url === r.ref; });
+    if (!doc) return '';
+    var snippet = (doc.description || doc.content || '').substring(0, 130).replace(/</g, '&lt;') + '…';
+    var section = doc.section ? '<span class="sr-section">' + doc.section + '</span>' : '';
+    return '<a class="search-result-item" role="option" href="' + doc.url + '">' + section +
+           '<h4>' + doc.title + '</h4><p>' + snippet + '</p></a>';
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var input = document.getElementById('searchInput');
+  if (input) {
+    input.addEventListener('input', function (e) {
+      var q = e.target.value.trim();
+      if (!q) { document.getElementById('searchResults').innerHTML = '<div class="search-empty">Type to search across all documentation</div>'; return; }
+      runSearch(q);
+    });
+  }
+});
+
+/* Keyboard: Cmd/Ctrl+K and "/" open; arrows navigate; Enter opens; Esc closes */
+document.addEventListener('keydown', function (e) {
+  var typing = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
+  if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); openSearch(); return; }
+  if (e.key === '/' && !typing && !e.metaKey && !e.ctrlKey) { e.preventDefault(); openSearch(); return; }
+  if (e.key === 'Escape') { closeSearch(); closeSidebar(); return; }
+
+  var overlay = document.getElementById('searchOverlay');
+  if (overlay && overlay.classList.contains('active')) {
+    var items = Array.prototype.slice.call(document.querySelectorAll('.search-result-item'));
+    if (!items.length) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); activeResult = Math.min(activeResult + 1, items.length - 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); activeResult = Math.max(activeResult - 1, 0); }
+    else if (e.key === 'Enter' && activeResult >= 0) { e.preventDefault(); window.location = items[activeResult].getAttribute('href'); return; }
+    else return;
+    items.forEach(function (it, i) { it.classList.toggle('active', i === activeResult); });
+    if (items[activeResult]) items[activeResult].scrollIntoView({ block: 'nearest' });
+  }
+});
+
+/* ======================= Copy code buttons ======================= */
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.main pre').forEach(function (pre) {
+    if (pre.classList.contains('mermaid') || pre.closest('.mermaid')) return;
+    var wrapper = document.createElement('div');
+    wrapper.className = 'code-wrapper';
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+    var host = pre.closest('[class*="language-"]');
+    var lang = '';
+    if (host) { var m = host.className.match(/language-([\w-]+)/); if (m) lang = m[1]; }
+    if (!lang) { var c = pre.querySelector('code'); if (c) { var cm = c.className.match(/language-([\w-]+)/); if (cm) lang = cm[1]; } }
+    if (lang && lang !== 'mermaid') { var lbl = document.createElement('span'); lbl.className = 'code-lang'; lbl.textContent = lang; wrapper.appendChild(lbl); }
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Copy code');
+    var COPY = '<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M5 11H3.5A1.5 1.5 0 012 9.5v-7A1.5 1.5 0 013.5 1h7A1.5 1.5 0 0112 2.5V5"/></svg>Copy';
+    btn.innerHTML = COPY;
+    btn.onclick = function () {
+      var code = pre.querySelector('code');
+      var text = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.innerHTML = '&#10003; Copied';
+        btn.classList.add('copied');
+        setTimeout(function () { btn.innerHTML = COPY; btn.classList.remove('copied'); }, 2000);
+      });
+    };
+    wrapper.appendChild(btn);
+  });
+});
+
+/* ==================== Table of Contents (right rail) ==================== */
+document.addEventListener('DOMContentLoaded', function () {
+  var toc = document.getElementById('toc');
+  if (!toc) return;
+  var main = document.querySelector('.main');
+  var heads = main ? main.querySelectorAll('h2, h3') : [];
+  if (heads.length < 2) { var rail = document.querySelector('.toc-rail'); if (rail) rail.style.display = 'none'; return; }
+  var html = '';
+  heads.forEach(function (h) {
+    if (!h.id) h.id = h.textContent.trim().toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '');
+    html += '<a href="#' + h.id + '" class="toc-link toc-' + h.tagName.toLowerCase() + '">' + h.textContent + '</a>';
+  });
+  toc.innerHTML = html;
+  var links = toc.querySelectorAll('.toc-link');
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id); });
+        }
+      });
+    }, { rootMargin: '-80px 0px -70% 0px' });
+    heads.forEach(function (h) { obs.observe(h); });
+  }
+});
+
+/* ==================== Images + tables (progressive) ==================== */
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.main img').forEach(function (img) { img.loading = 'lazy'; img.decoding = 'async'; });
+  document.querySelectorAll('.main table').forEach(function (t) {
+    if (t.parentElement.classList.contains('table-scroll')) return;
+    var wrap = document.createElement('div'); wrap.className = 'table-scroll';
+    t.parentNode.insertBefore(wrap, t); wrap.appendChild(t);
+  });
+});
+
+/* ============================ Mermaid ============================ */
+document.addEventListener('DOMContentLoaded', function () {
+  var nodes = document.querySelectorAll('.language-mermaid, pre.mermaid, code.language-mermaid');
+  if (!nodes.length) return;
+  nodes.forEach(function (n) {
+    if (n.tagName === 'PRE' && n.classList.contains('mermaid')) return;
+    var code = n.tagName === 'CODE' ? n : n.querySelector('code');
+    var text = (code || n).innerText;
+    var pre = document.createElement('pre');
+    pre.className = 'mermaid';
+    pre.textContent = text;
+    var target = n.closest('.language-mermaid') || n;
+    target.parentNode.replaceChild(pre, target);
+  });
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+  s.onload = function () {
+    function themeFor() { return document.documentElement.getAttribute('data-theme') === 'light' ? 'default' : 'dark'; }
+    window.mermaid.initialize({ startOnLoad: false, theme: themeFor(), securityLevel: 'strict' });
+    window.mermaid.run();
+    window.__reThemeMermaid = function () {
+      document.querySelectorAll('pre.mermaid').forEach(function (p) {
+        if (p.getAttribute('data-src')) { p.innerHTML = p.getAttribute('data-src'); p.removeAttribute('data-processed'); }
+      });
+      window.mermaid.initialize({ startOnLoad: false, theme: themeFor(), securityLevel: 'strict' });
+      window.mermaid.run();
+    };
+    document.querySelectorAll('pre.mermaid').forEach(function (p) { p.setAttribute('data-src', p.textContent); });
+  };
+  document.head.appendChild(s);
+});
+</script>

@@ -1,0 +1,38 @@
+{% comment %}
+  Doc meta row — driven entirely by front matter, no body content required:
+    difficulty: beginner | intermediate | advanced
+    last_updated: 2026-07-17
+  Reading time is auto-computed from word count (~200 wpm).
+{% endcomment %}
+{% assign words = page.content | number_of_words %}
+{% assign minutes = words | divided_by: 200 | plus: 1 %}
+<div class="doc-meta">
+  {% if page.difficulty %}
+    <span class="doc-badge diff-{{ page.difficulty }}">{{ page.difficulty }}</span>
+  {% endif %}
+  <span class="doc-meta-item" title="Estimated reading time">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5V8l2.5 1.5" stroke-linecap="round"/></svg>
+    {{ minutes }} min read
+  </span>
+  {% if page.last_updated %}
+    <span class="doc-meta-item" title="Last updated">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2 8a6 6 0 116 6" stroke-linecap="round"/><path d="M5 11H2v3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Updated {{ page.last_updated | date: "%b %-d, %Y" }}
+    </span>
+  {% endif %}
+  {% if page.tags %}
+    <span class="doc-tags">
+      {% for tag in page.tags %}<span class="doc-tag">#{{ tag }}</span>{% endfor %}
+    </span>
+  {% endif %}
+</div>
+{% if page.prerequisites %}
+  <div class="doc-prereq">
+    <span class="doc-prereq-label">Prerequisites</span>
+    <ul>
+      {% for pre in page.prerequisites %}
+        <li>{% if pre.url %}<a href="{{ pre.url | relative_url }}">{{ pre.title }}</a>{% else %}{{ pre.title | default: pre }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

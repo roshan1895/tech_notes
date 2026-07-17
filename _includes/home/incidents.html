@@ -1,0 +1,29 @@
+{% comment %} Real production incidents — pulled from the real-projects collection. Empty-state until content exists. {% endcomment %}
+{% assign cases = "" | split: "" %}
+{% for d in site['real-projects'] %}
+  {% if d.nav_order and d.nav_order != 0 %}{% assign cases = cases | push: d %}{% endif %}
+{% endfor %}
+{% assign cases = cases | sort: "last_updated" | reverse %}
+
+<section class="home-section">
+  <div class="section-header">
+    <span>Real Production Incidents</span>
+    <div class="line"></div>
+    <a href="{{ '/real-projects/' | relative_url }}" class="section-more">all case studies →</a>
+  </div>
+  {% if cases.size > 0 %}
+    <div class="incident-list">
+      {% for c in cases limit: 4 %}
+        <a href="{{ c.url | relative_url }}" class="incident-item glow-card">
+          <span class="incident-dot"></span>
+          <div>
+            <h3>{{ c.title }}</h3>
+            {% if c.description %}<p>{{ c.description }}</p>{% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-inline">Post-mortems and production case studies will appear here. Start one from the <a href="{{ '/real-projects/' | relative_url }}">Real Projects</a> section.</div>
+  {% endif %}
+</section>

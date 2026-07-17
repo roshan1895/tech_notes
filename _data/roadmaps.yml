@@ -1,0 +1,145 @@
+# =============================================================================
+#  Learning Roadmaps — FRAMEWORK ONLY.
+#
+#  Each roadmap has three tiers (beginner / intermediate / advanced). The step
+#  arrays are intentionally EMPTY — fill them in later. A step is:
+#    - { title: "SSH basics", url: /linux/ssh/ }     # url optional
+#  The /roadmaps/ landing and each roadmap page render whatever is here and show
+#  a "steps coming soon" state for empty tiers. Progress is tracked client-side
+#  (localStorage), keyed by roadmap + step title.
+# =============================================================================
+
+roadmaps:
+  - key: google-ace
+    title: Google ACE
+    icon: "☁️"
+    color: blue
+    description: Google Associate Cloud Engineer — deploy applications, monitor operations, and manage enterprise solutions on Google Cloud.
+    beginner:
+      - title: "Cloud computing & Google Cloud overview (IaaS / PaaS / SaaS)"
+      - title: "Read the official ACE exam guide & the 5 exam domains"
+        url: "https://cloud.google.com/learn/certification/cloud-engineer"
+      - title: "Global infrastructure: regions & zones"
+        url: "https://cloud.google.com/compute/docs/regions-zones"
+      - title: "Resource hierarchy: Organization → Folders → Projects → Resources"
+        url: "https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy"
+      - title: "Create and manage projects"
+      - title: "Billing accounts, budgets & billing alerts"
+        url: "https://cloud.google.com/billing/docs"
+      - title: "Cloud Console, Cloud Shell & the gcloud CLI"
+        url: "https://cloud.google.com/sdk/gcloud"
+      - title: "Enabling APIs, service usage & quotas"
+    intermediate:
+      - title: "Compute Engine: VMs, machine types, images & metadata"
+        url: "https://cloud.google.com/compute/docs"
+      - title: "Managed instance groups & autoscaling"
+      - title: "App Engine: standard vs flexible environments"
+        url: "https://cloud.google.com/appengine/docs"
+      - title: "Cloud Run: deploy containerized apps"
+        url: "https://cloud.google.com/run/docs"
+      - title: "Google Kubernetes Engine (GKE) basics"
+        url: "https://cloud.google.com/kubernetes-engine/docs"
+      - title: "VPC networking: subnets, routes & firewall rules"
+        url: "https://cloud.google.com/vpc/docs"
+      - title: "Cloud Load Balancing & Cloud CDN"
+      - title: "Cloud Storage: buckets, storage classes & lifecycle"
+        url: "https://cloud.google.com/storage/docs"
+      - title: "Persistent disks & snapshots"
+      - title: "Cloud SQL & choosing a database service"
+        url: "https://cloud.google.com/sql/docs"
+      - title: "IAM: basic, predefined & custom roles + service accounts"
+        url: "https://cloud.google.com/iam/docs/overview"
+    advanced:
+      - title: "Cloud Monitoring, Logging & Error Reporting"
+        url: "https://cloud.google.com/monitoring/docs"
+      - title: "IAM deep dive: policy hierarchy, conditions & least privilege"
+      - title: "Infrastructure as Code: Deployment Manager / Terraform"
+        url: "https://cloud.google.com/deployment-manager/docs"
+      - title: "Networking: Cloud DNS, Cloud NAT, Cloud VPN & Interconnect"
+      - title: "Shared VPC & VPC Network Peering"
+      - title: "Cost optimization: committed-use discounts & Spot VMs"
+      - title: "Data services overview: BigQuery, Pub/Sub, Bigtable, Spanner, Firestore"
+      - title: "Backups, snapshots & disaster recovery"
+      - title: "Security: org policies, service-account keys & Secret Manager"
+      - title: "Hands-on labs (Google Cloud Skills Boost) + practice exam"
+
+  - key: aws
+    title: AWS
+    icon: "🟧"
+    color: orange
+    description: Amazon Web Services fundamentals through architecture.
+    beginner: []
+    intermediate: []
+    advanced: []
+
+  - key: linux
+    title: Linux
+    icon: "🖥️"
+    color: cyan
+    description: From the shell to systems administration.
+    beginner: []
+    intermediate: []
+    advanced: []
+
+  - key: docker
+    title: Docker
+    icon: "🐳"
+    color: blue
+    description: Containers, images, and local orchestration.
+    beginner: []
+    intermediate: []
+    advanced: []
+
+  - key: kubernetes
+    title: Kubernetes
+    icon: "☸️"
+    color: blue
+    description: Container orchestration at scale.
+    beginner: []
+    intermediate: []
+    advanced: []
+
+  - key: terraform
+    title: Terraform
+    icon: "🏗️"
+    color: purple
+    description: Infrastructure as code.
+    beginner: []
+    intermediate: []
+    advanced: []
+
+  - key: platform-engineering
+    title: Platform Engineering
+    icon: "⚙️"
+    color: green
+    description: Internal platforms, golden paths, and developer experience.
+    beginner: []
+    intermediate: []
+    advanced: []
+
+  - key: principal-engineer
+    title: Principal Engineer
+    icon: "🧠"
+    color: pink
+    description: Technical leadership and staff-plus impact.
+    beginner: []
+    intermediate: []
+    advanced: []
+
+  - key: android
+    title: Android
+    icon: "📱"
+    color: green
+    description: Modern Android development.
+    beginner: []
+    intermediate: []
+    advanced: []
+
+  - key: system-design
+    title: System Design
+    icon: "🏛️"
+    color: purple
+    description: Designing scalable, reliable systems.
+    beginner: []
+    intermediate: []
+    advanced: []

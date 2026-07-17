@@ -1,0 +1,45 @@
+---
+layout: default
+---
+{% comment %}
+  Collection landing. Auto-lists docs (site[page.section]) by nav_order, with a
+  "coming soon" empty state. No hand-maintained index tables.
+{% endcomment %}
+{% assign section_title = page.section | replace: '-', ' ' %}
+{% assign all_docs = site[page.section] | sort: "nav_order" %}
+{% assign docs = "" | split: "" %}
+{% for d in all_docs %}
+  {% if d.nav_order and d.nav_order != 0 %}{% assign docs = docs | push: d %}{% endif %}
+{% endfor %}
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="{{ '/docs/' | relative_url }}">Docs</a>
+  <span class="breadcrumb-sep" aria-hidden="true">/</span>
+  <span class="breadcrumb-current" aria-current="page">{{ page.title | default: section_title }}</span>
+</nav>
+
+<h1 class="section-title">{{ page.title | default: section_title }}</h1>
+{% if page.description %}<p class="section-lede">{{ page.description }}</p>{% endif %}
+
+{{ content }}
+
+{% if docs.size > 0 %}
+  <div class="doc-index">
+    {% for doc in docs %}
+      <a href="{{ doc.url | relative_url }}" class="doc-index-item glow-card">
+        <span class="doc-index-num">{{ doc.nav_order | prepend: '0' | slice: -2, 2 }}</span>
+        <div class="doc-index-body">
+          <h3>{{ doc.title }}</h3>
+          {% if doc.description %}<p>{{ doc.description }}</p>{% endif %}
+        </div>
+        {% if doc.difficulty %}<span class="doc-badge diff-{{ doc.difficulty }}">{{ doc.difficulty }}</span>{% endif %}
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-glyph animate-float">{}</div>
+    <p>Notes for <strong>{{ page.title | default: section_title }}</strong> are on the way.</p>
+    <div class="empty-status"><span class="dollar">$</span> status: <span class="building">building</span><span class="cursor-blink"></span></div>
+  </div>
+{% endif %}

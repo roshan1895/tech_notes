@@ -1,0 +1,20 @@
+<section class="home-section">
+  <div class="section-header">
+    <span>Learning Roadmaps</span>
+    <div class="line"></div>
+    <a href="{{ '/roadmaps/' | relative_url }}" class="section-more">view all →</a>
+  </div>
+  <div class="roadmap-grid">
+    {% for r in site.data.roadmaps.roadmaps limit: 6 %}
+      {% assign total = r.beginner.size | plus: r.intermediate.size | plus: r.advanced.size %}
+      <a href="{{ '/roadmaps/' | append: r.key | append: '/' | relative_url }}" class="roadmap-card glow-card">
+        <div class="roadmap-card-top">
+          <span class="roadmap-card-emoji roadmap-{{ r.color }}" aria-hidden="true">{{ r.icon }}</span>
+        </div>
+        <h3>{{ r.title }}</h3>
+        {% if r.description %}<p>{{ r.description }}</p>{% endif %}
+        <span class="roadmap-card-meta">{{ total }} steps</span>
+      </a>
+    {% endfor %}
+  </div>
+</section>

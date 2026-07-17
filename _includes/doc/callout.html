@@ -1,0 +1,13 @@
+{% comment %}
+  Reusable callout. Use for the standard technical-page sections.
+  Simple one-liner usage:
+    {% include doc/callout.html type="mistake" title="Common mistake" text="Don't run migrations on the primary during peak." %}
+  Types: overview | why | architecture | commands | mistake | interview | note | tip | warning
+  For rich multi-paragraph/markdown bodies, use the matching CSS class directly:
+    <div class="callout callout-mistake"><div class="callout-title">…</div> …markdown… </div>
+{% endcomment %}
+<div class="callout callout-{{ include.type | default: 'note' }}">
+  {% if include.title %}<div class="callout-title">{{ include.title }}</div>{% endif %}
+  {% if include.text %}<p>{{ include.text }}</p>{% endif %}
+  {{ include.content }}
+</div>

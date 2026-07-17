@@ -1,0 +1,26 @@
+{% comment %} Recent updates — sitewide changelog from last_updated. Empty-state until content exists. {% endcomment %}
+{% assign updated = "" | split: "" %}
+{% for d in site.documents %}
+  {% if d.last_updated and d.nav_order != 0 %}{% assign updated = updated | push: d %}{% endif %}
+{% endfor %}
+{% assign updated = updated | sort: "last_updated" | reverse %}
+
+<section class="home-section">
+  <div class="section-header">
+    <span>Recent Updates</span>
+    <div class="line"></div>
+  </div>
+  {% if updated.size > 0 %}
+    <ul class="update-feed">
+      {% for d in updated limit: 8 %}
+        <li class="update-row">
+          <span class="update-date">{{ d.last_updated | date: "%Y-%m-%d" }}</span>
+          <a href="{{ d.url | relative_url }}" class="update-link">{{ d.title }}</a>
+          <span class="update-section">{{ d.section | replace: '-', ' ' }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty-inline">A changelog of updated pages will appear here as content lands. Add <code>last_updated:</code> to a doc's front matter to track it.</div>
+  {% endif %}
+</section>

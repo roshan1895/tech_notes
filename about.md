@@ -4,37 +4,37 @@ title: About
 ---
 
 <div class="about-header">
-  <div class="about-avatar">R</div>
+  <div class="about-avatar">R<div class="online-dot"><span class="status-dot"></span></div></div>
   <div class="about-intro">
     <h1>Roshan</h1>
-    <p>Principal Engineer &bull; Building reliable systems at scale</p>
+    <p>principal_engineer // building reliable systems</p>
   </div>
 </div>
 
 <div class="about-stats">
   <div class="about-stat">
     <span class="number">10+</span>
-    <span class="label">Years in Engineering</span>
+    <span class="label">years_experience</span>
   </div>
   <div class="about-stat">
     <span class="number">20+</span>
-    <span class="label">Servers Deployed</span>
+    <span class="label">servers_deployed</span>
   </div>
   <div class="about-stat">
     <span class="number">20</span>
-    <span class="label">Guides Written</span>
+    <span class="label">guides_written</span>
   </div>
 </div>
 
 <div class="about-section">
 
-## Why These Notes Exist
+## // why these notes exist
 
 I've debugged enough 502 errors, chased enough permission issues, and rebuilt enough broken deployments to know that most production problems come from the same handful of gaps in understanding.
 
 These notes are what I wish existed when I started — structured, opinionated, and written from real deployment experience across AWS, DigitalOcean, and bare-metal servers. No filler, no theory without practice.
 
-## What I Work With
+## // tech_stack
 
 <div class="tech-tags">
   <span class="tech-tag">Node.js</span>
@@ -51,14 +51,14 @@ These notes are what I wish existed when I started — structured, opinionated, 
   <span class="tech-tag">Kubernetes</span>
 </div>
 
-## Philosophy
+## // philosophy
 
 - **Understand the layers** — Don't just copy commands. Know why each layer exists and what breaks when it fails.
 - **Manual first, then automate** — You can't debug automation you don't understand manually.
 - **Production is the test** — Unit tests pass, staging looks fine, but production is where you learn what actually matters.
 
-## Get in Touch
+## // connect
 
-Find the source for this site and all guides on [GitHub](https://github.com/roshan1895/tech_notes). Open an issue if you spot something wrong or want to suggest a topic.
+Source code and guides on [GitHub](https://github.com/roshan1895/tech_notes). Open an issue to report errors or suggest topics.
 
 </div>

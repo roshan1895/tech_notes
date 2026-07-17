@@ -1,0 +1,52 @@
+<!-- Top Nav — links rendered from _data/navigation.yml (primary) -->
+<nav class="topnav" aria-label="Primary">
+  <div class="nav-inner">
+    <button class="nav-hamburger" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false" onclick="toggleSidebar()">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h14M3 10h14M3 14h14"/></svg>
+    </button>
+
+    <a href="{{ '/' | relative_url }}" class="nav-brand">
+      <div class="nav-brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2 2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <span class="nav-brand-text"><span class="hi">stack</span><span class="lo">notes</span></span>
+    </a>
+
+    <div class="nav-links">
+      {% for item in site.data.navigation.primary %}
+        {% assign is_active = false %}
+        {% if item.url == '/' %}
+          {% if page.url == '/' %}{% assign is_active = true %}{% endif %}
+        {% elsif page.url contains item.url %}
+          {% assign is_active = true %}
+        {% endif %}
+        <a href="{{ item.url | relative_url }}" class="{% if is_active %}active{% endif %}">
+          <span class="nav-emoji" aria-hidden="true">{{ item.icon }}</span>
+          <span>{{ item.title }}</span>
+        </a>
+      {% endfor %}
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-status">
+        <span class="status-dot"></span>
+        v2.0
+      </div>
+
+      <button class="search-btn" onclick="openSearch()" aria-label="Search (Command or Control + K)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4 4" stroke-linecap="round"/></svg>
+        <span>search</span>
+        <kbd class="kbd-search">⌘K</kbd>
+      </button>
+
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <svg class="icon-sun" viewBox="0 0 20 20" fill="currentColor"><path d="M10 15a5 5 0 100-10 5 5 0 000 10zm0-12a1 1 0 01-1-1V1a1 1 0 112 0v1a1 1 0 01-1 1zm0 14a1 1 0 01-1-1v-1a1 1 0 112 0v1a1 1 0 01-1 1zm7-7a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1z"/></svg>
+        <svg class="icon-moon" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.003 8.003 0 1010.586 10.586z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>

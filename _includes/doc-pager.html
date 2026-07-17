@@ -1,0 +1,53 @@
+{% comment %}
+  Prev / Next pager — collection-aware and scalable.
+
+  * Collection docs: iterate ONLY this doc's collection (site[page.collection]),
+    ordered by front-matter `nav_order`. Scoped iteration — no full site.pages scan.
+  * Existing server_deployment guides (plain pages): keep the original filename
+    ordering so their routing/behaviour is unchanged.
+{% endcomment %}
+
+{% assign pager_docs = nil %}
+
+{% if page.collection %}
+  {% comment %} Collection docs sorted by nav_order; the landing (nav_order 0) is excluded {% endcomment %}
+  {% assign ordered = site[page.collection] | sort: "nav_order" %}
+  {% assign pager_docs = "" | split: "" %}
+  {% for d in ordered %}
+    {% if d.nav_order and d.nav_order != 0 %}
+      {% assign pager_docs = pager_docs | push: d %}
+    {% endif %}
+  {% endfor %}
+
+{% elsif page.url contains 'server_deployment/' and page.url != '/server_deployment/' %}
+  {% assign pager_docs = site.pages | where_exp: "p", "p.url contains 'server_deployment/'" | where_exp: "p", "p.url != '/server_deployment/'" | sort: "url" %}
+{% endif %}
+
+{% if pager_docs and pager_docs.size > 0 %}
+  {% assign current_index = -1 %}
+  {% for g in pager_docs %}
+    {% if g.url == page.url %}{% assign current_index = forloop.index0 %}{% endif %}
+  {% endfor %}
+
+  {% if current_index >= 0 %}
+    <div class="guide-nav">
+      {% assign prev_index = current_index | minus: 1 %}
+      {% if prev_index >= 0 %}
+        {% assign prev_page = pager_docs[prev_index] %}
+        <a href="{{ prev_page.url | relative_url }}" class="guide-nav-link prev">
+          <span class="guide-nav-label">&larr; prev</span>
+          <span class="guide-nav-title">{{ prev_page.title }}</span>
+        </a>
+      {% endif %}
+
+      {% assign next_index = current_index | plus: 1 %}
+      {% if next_index < pager_docs.size %}
+        {% assign next_page = pager_docs[next_index] %}
+        <a href="{{ next_page.url | relative_url }}" class="guide-nav-link next">
+          <span class="guide-nav-label">next &rarr;</span>
+          <span class="guide-nav-title">{{ next_page.title }}</span>
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endif %}

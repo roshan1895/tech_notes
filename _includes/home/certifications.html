@@ -1,0 +1,19 @@
+<section class="home-section">
+  <div class="section-header">
+    <span>Certifications</span>
+    <div class="line"></div>
+    <a href="{{ '/certifications/' | relative_url }}" class="section-more">view all →</a>
+  </div>
+  <div class="cert-grid">
+    {% for c in site.data.certifications.certifications limit: 4 %}
+      <a href="{% if c.roadmap %}{{ '/roadmaps/' | append: c.roadmap | append: '/' | relative_url }}{% else %}{{ '/certifications/' | relative_url }}{% endif %}" class="cert-card glow-card">
+        <div class="cert-top">
+          <span class="cert-emoji" aria-hidden="true">{{ c.icon }}</span>
+          <span class="cert-status status-{{ c.status }}">{{ c.status }}</span>
+        </div>
+        <h3>{{ c.short | default: c.name }}</h3>
+        <p class="cert-provider">{{ c.provider }}</p>
+      </a>
+    {% endfor %}
+  </div>
+</section>

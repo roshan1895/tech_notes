@@ -1,0 +1,23 @@
+{% comment %} Quick cheat sheets — lists cheatsheet docs. Empty-state until content exists. {% endcomment %}
+{% assign sheets = "" | split: "" %}
+{% for d in site.cheatsheets %}
+  {% if d.nav_order and d.nav_order != 0 %}{% assign sheets = sheets | push: d %}{% endif %}
+{% endfor %}
+{% assign sheets = sheets | sort: "nav_order" %}
+
+<section class="home-section">
+  <div class="section-header">
+    <span>Quick Cheat Sheets</span>
+    <div class="line"></div>
+    <a href="{{ '/cheatsheets/' | relative_url }}" class="section-more">all sheets →</a>
+  </div>
+  {% if sheets.size > 0 %}
+    <div class="chip-grid">
+      {% for s in sheets limit: 10 %}
+        <a href="{{ s.url | relative_url }}" class="chip">{}  {{ s.title }}</a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-inline">Command references for Git, Docker, Linux, kubectl and more will appear here.</div>
+  {% endif %}
+</section>

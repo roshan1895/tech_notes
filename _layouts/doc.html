@@ -1,0 +1,24 @@
+---
+layout: default
+---
+{% comment %}
+  Reusable technical-page layout. Renders title + meta from front matter, so
+  page bodies should start at "## " (see _templates/technical-page.md).
+  Front matter: difficulty, last_updated, tags[], prerequisites[], related[], references[].
+{% endcomment %}
+<div class="doc-shell">
+  <article class="doc-article">
+    {% include doc/breadcrumb.html %}
+    <h1 class="doc-title">{{ page.title }}</h1>
+    {% if page.description %}<p class="doc-lede">{{ page.description }}</p>{% endif %}
+    {% include doc/meta.html %}
+
+    <div class="doc-body">
+      {{ content }}
+    </div>
+
+    {% include doc/footer.html %}
+  </article>
+
+  {% include doc/toc.html %}
+</div>

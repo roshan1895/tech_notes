@@ -1,0 +1,133 @@
+---
+layout: default
+---
+{% comment %}
+  Dual-purpose:
+    * page.roadmap set  -> render that roadmap's detail (3 tiers, clickable steps)
+    * otherwise (landing) -> grid of all roadmaps with progress rings
+  Roadmap data: _data/roadmaps.yml. Progress is client-side (localStorage).
+{% endcomment %}
+
+{% if page.roadmap %}
+  {% assign rm = nil %}
+  {% for r in site.data.roadmaps.roadmaps %}{% if r.key == page.roadmap %}{% assign rm = r %}{% endif %}{% endfor %}
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{{ '/roadmaps/' | relative_url }}">Roadmaps</a>
+    <span class="breadcrumb-sep" aria-hidden="true">/</span>
+    <span class="breadcrumb-current" aria-current="page">{{ rm.title }}</span>
+  </nav>
+
+  {% assign total = rm.beginner.size | plus: rm.intermediate.size | plus: rm.advanced.size %}
+  <div class="roadmap-head">
+    <span class="roadmap-emoji" aria-hidden="true">{{ rm.icon }}</span>
+    <div>
+      <h1 class="doc-title">{{ rm.title }} Roadmap</h1>
+      {% if rm.description %}<p class="doc-lede">{{ rm.description }}</p>{% endif %}
+    </div>
+  </div>
+
+  <div class="roadmap-progress" data-roadmap="{{ rm.key }}" data-total="{{ total }}">
+    <div class="roadmap-progress-bar"><span class="roadmap-progress-fill" style="width:0%"></span></div>
+    <span class="roadmap-progress-text">0 / {{ total }} complete</span>
+  </div>
+
+  {% assign tiers = "beginner,intermediate,advanced" | split: "," %}
+  {% for tier in tiers %}
+    {% assign steps = rm[tier] %}
+    <section class="roadmap-tier">
+      <h2 class="roadmap-tier-h tier-{{ tier }}">{{ tier | capitalize }}</h2>
+      {% if steps and steps.size > 0 %}
+        <ol class="roadmap-steps">
+          {% for step in steps %}
+            <li class="roadmap-step">
+              <label>
+                <input type="checkbox" class="roadmap-check" data-roadmap="{{ rm.key }}" data-step="{{ step.title | escape }}">
+                <span class="roadmap-step-title">
+                  {% if step.url %}
+                    {% if step.url contains '://' %}<a href="{{ step.url }}" target="_blank" rel="noopener">{{ step.title }}</a>
+                    {% else %}<a href="{{ step.url | relative_url }}">{{ step.title }}</a>{% endif %}
+                  {% else %}{{ step.title }}{% endif %}
+                </span>
+              </label>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="roadmap-empty">Steps coming soon.</p>
+      {% endif %}
+    </section>
+  {% endfor %}
+
+  <script>
+  (function () {
+    var root = document.querySelector('.roadmap-progress');
+    if (!root) return;
+    var key = root.getAttribute('data-roadmap');
+    var total = parseInt(root.getAttribute('data-total'), 10) || 0;
+    var checks = document.querySelectorAll('.roadmap-check');
+    function storeKey(step) { return 'rm:' + key + ':' + step; }
+    function refresh() {
+      var done = 0;
+      checks.forEach(function (c) { if (c.checked) done++; });
+      var pct = total ? Math.round(done / total * 100) : 0;
+      root.querySelector('.roadmap-progress-fill').style.width = pct + '%';
+      root.querySelector('.roadmap-progress-text').textContent = done + ' / ' + total + ' complete';
+    }
+    checks.forEach(function (c) {
+      try { if (localStorage.getItem(storeKey(c.getAttribute('data-step'))) === '1') c.checked = true; } catch (e) {}
+      c.addEventListener('change', function () {
+        try { localStorage.setItem(storeKey(c.getAttribute('data-step')), c.checked ? '1' : '0'); } catch (e) {}
+        c.closest('.roadmap-step').classList.toggle('done', c.checked);
+        refresh();
+      });
+      if (c.checked) c.closest('.roadmap-step').classList.add('done');
+    });
+    refresh();
+  })();
+  </script>
+
+{% else %}
+  {% comment %} ---------- Roadmaps landing ---------- {% endcomment %}
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{{ '/docs/' | relative_url }}">Docs</a>
+    <span class="breadcrumb-sep" aria-hidden="true">/</span>
+    <span class="breadcrumb-current" aria-current="page">Roadmaps</span>
+  </nav>
+  <h1 class="section-title">Learning Roadmaps</h1>
+  <p class="section-lede">Structured, clickable paths from beginner to advanced. Progress is saved in your browser.</p>
+
+  <div class="roadmap-grid">
+    {% for r in site.data.roadmaps.roadmaps %}
+      {% assign total = r.beginner.size | plus: r.intermediate.size | plus: r.advanced.size %}
+      <a href="{{ '/roadmaps/' | append: r.key | append: '/' | relative_url }}" class="roadmap-card glow-card" data-roadmap="{{ r.key }}" data-total="{{ total }}">
+        <div class="roadmap-card-top">
+          <span class="roadmap-card-emoji roadmap-{{ r.color }}" aria-hidden="true">{{ r.icon }}</span>
+          <span class="roadmap-ring" data-total="{{ total }}"><span class="roadmap-ring-num">0%</span></span>
+        </div>
+        <h3>{{ r.title }}</h3>
+        {% if r.description %}<p>{{ r.description }}</p>{% endif %}
+        <span class="roadmap-card-meta">{{ total }} steps</span>
+      </a>
+    {% endfor %}
+  </div>
+
+  <script>
+  (function () {
+    document.querySelectorAll('.roadmap-card').forEach(function (card) {
+      var key = card.getAttribute('data-roadmap');
+      var total = parseInt(card.getAttribute('data-total'), 10) || 0;
+      var done = 0;
+      if (total) {
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && k.indexOf('rm:' + key + ':') === 0 && localStorage.getItem(k) === '1') done++;
+        }
+      }
+      var pct = total ? Math.round(done / total * 100) : 0;
+      var num = card.querySelector('.roadmap-ring-num');
+      if (num) num.textContent = pct + '%';
+    });
+  })();
+  </script>
+{% endif %}

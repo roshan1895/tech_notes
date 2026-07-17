@@ -1,0 +1,21 @@
+<section class="home-section">
+  <div class="section-header">
+    <span>Featured Topics</span>
+    <div class="line"></div>
+    <a href="{{ '/docs/' | relative_url }}" class="section-more">all topics →</a>
+  </div>
+  <div class="topic-grid">
+    {% for group in site.data.navigation.sidebar %}
+      {% if group.group == 'Topics' %}
+        {% for item in group.items %}
+          {% if item.collection %}{% assign target = '/' | append: item.collection | append: '/' %}{% else %}{% assign target = item.url %}{% endif %}
+          <a href="{{ target | relative_url }}" class="topic-card glow-card">
+            <span class="topic-emoji" aria-hidden="true">{{ item.icon }}</span>
+            <span class="topic-name">{{ item.title }}</span>
+            {% if item.status == 'soon' %}<span class="topic-soon">soon</span>{% endif %}
+          </a>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
